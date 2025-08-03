@@ -60,3 +60,36 @@ LEFT JOIN Examinations e
 GROUP BY stu.student_id, stu.student_name, sub.subject_name
 ORDER BY stu.student_id, sub.subject_name;
 
+ 9
+-- 570. Managers with at Least 5 Direct Reports
+SELECT m.name
+FROM Employee e
+JOIN Employee m ON e.managerId = m.Id
+GROUP BY m.id, m.name
+HAVING COUNT(m.id) >= 5;
+
+-- 620. Not Boring Movies
+
+SELECT *
+FROM Cinema
+WHERE (id%2 = 1) AND description NOT LIKE '%boring%'
+ORDER BY rating DESC;
+
+-- 1251. Average Selling Price
+SELECT p.product_id, ROUND(SUM(u.units*p.price)/SUM(u.units)::numeric, 2) AS average_price
+FROM Prices p
+LEFT JOIN UnitsSold u ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY p.product_id;
+
+-- 1075. Project Employees I
+SELECT p.project_id, ROUND((SUM(e.experience_years)/COUNT(e.employee_id)::numeric), 2) AS average_years
+FROM Employee e
+JOIN Project p ON e.employee_id = p.employee_id
+GROUP BY p.project_id; 
+
+-- 1633. Percentage of Users Attended a Contest
+SELECT r.contest_id, ROUND((COUNT(r.user_id)*100)/(SELECT COUNT(user_id) FROM Users)::numeric, 2) AS percentage  
+FROM Register r
+RIGHT JOIN Users u ON r.user_id = u.user_id
+GROUP BY r.contest_id
+ORDER BY percentage DESC, r.contest_id ASC;
